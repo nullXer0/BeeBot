@@ -53,21 +53,28 @@ public class RollCallCommand extends BaseSlashCommand
         int minute = event.getOption("minute", 0, OptionMapping::getAsInt);
         int lengthMinutes = event.getOption("length_minutes", 0, OptionMapping::getAsInt);
 
-        Calendar startCal = Calendar.getInstance(TimeZone.getTimeZone("America/New_York"));
-        if(month < startCal.get(Calendar.MONTH))
+        try
         {
-            startCal.add(Calendar.YEAR, 1);
+            Calendar startCal = Calendar.getInstance(TimeZone.getTimeZone("America/New_York"));
+            if(month < startCal.get(Calendar.MONTH))
+            {
+                startCal.add(Calendar.YEAR, 1);
+            }
+            startCal.set(Calendar.MONTH, month);
+            startCal.set(Calendar.DAY_OF_MONTH, day);
+            startCal.set(Calendar.HOUR_OF_DAY, hour);
+            startCal.set(Calendar.MINUTE, minute);
+
+            Calendar endCal = (Calendar) startCal.clone();
+            endCal.add(Calendar.HOUR_OF_DAY, lengthHours);
+            endCal.add(Calendar.MINUTE, lengthMinutes);
+
+            RollCallSender.sendRollCall(channel, eventType, startCal, endCal);
+            event.reply("Successfully send poll message").setEphemeral(true).queue();
         }
-        startCal.set(Calendar.MONTH, month);
-        startCal.set(Calendar.DAY_OF_MONTH, day);
-        startCal.set(Calendar.HOUR_OF_DAY, hour);
-        startCal.set(Calendar.MINUTE, minute);
-
-        Calendar endCal = (Calendar) startCal.clone();
-        endCal.add(Calendar.HOUR_OF_DAY, lengthHours);
-        endCal.add(Calendar.MINUTE, lengthMinutes);
-
-        RollCallSender.sendRollCall(channel, eventType, startCal, endCal);
-        event.reply("Successfully send poll message").setEphemeral(true).queue();
+        catch(IllegalArgumentException ex)
+        {
+            event.reply("Invalid date provided.").setEphemeral(true).queue();
+        }
     }
 }
