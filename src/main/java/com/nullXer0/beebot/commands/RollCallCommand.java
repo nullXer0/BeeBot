@@ -26,14 +26,19 @@ public class RollCallCommand extends BaseSlashCommand
                 new OptionData(OptionType.STRING, "type", "The type of event", true)
                         .addChoice("Scrim", "Scrim")
                         .addChoice("VOD Review", "VOD Review"),
-                new OptionData(OptionType.INTEGER, "month", "The month of the event", true),
-                new OptionData(OptionType.INTEGER, "day", "The day of the event", true),
-                new OptionData(OptionType.INTEGER, "hour", "The hour of the event", true),
-                new OptionData(OptionType.INTEGER, "length_hours", "How many hours the event goes for", true),
-                new OptionData(OptionType.INTEGER, "minute", "The minute of the event (defaults to 0)"),
+                new OptionData(OptionType.INTEGER, "month", "The month of the event", true)
+                        .setRequiredRange(1, 12),
+                new OptionData(OptionType.INTEGER, "day", "The day of the event", true)
+                        .setRequiredRange(1, 31),
+                new OptionData(OptionType.INTEGER, "hour", "The hour of the event", true)
+                        .setRequiredRange(1, 24),
+                new OptionData(OptionType.INTEGER, "length_hours", "How many hours the event goes for", true)
+                        .setRequiredRange(1, 24),
+                new OptionData(OptionType.INTEGER, "minute", "The minute of the event (defaults to 0)")
+                        .setRequiredRange(0, 59),
                 new OptionData(OptionType.INTEGER, "length_minutes", "How many additional minutes the event goes for (defaults to 0)")
+                        .setRequiredRange(0, 59)
         };
-        // {channel} {name} {month} {day} {hour24} {minute} {duriationH} {durationM}
     }
 
     @Override
@@ -41,7 +46,7 @@ public class RollCallCommand extends BaseSlashCommand
     {
         TextChannel channel = event.getOption("channel", OptionMapping::getAsChannel).asTextChannel();
         String eventType = event.getOption("type", OptionMapping::getAsString);
-        int month = event.getOption("month", 0, OptionMapping::getAsInt)-1;
+        int month = event.getOption("month", 0, OptionMapping::getAsInt) - 1;
         int day = event.getOption("day", 0, OptionMapping::getAsInt);
         int hour = event.getOption("hour", 0, OptionMapping::getAsInt);
         int lengthHours = event.getOption("length_hours", 0, OptionMapping::getAsInt);
