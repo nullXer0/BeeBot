@@ -1,5 +1,6 @@
 plugins {
-    id("java")
+    java
+    id("com.gradleup.shadow") version "8.3.6"
 }
 
 group = "com.nullXer0"
@@ -23,6 +24,14 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
 }
 
+tasks.withType<Jar> {
+    manifest {
+        attributes["Main-Class"] = "com.nullXer0.beebot.BeeBot"
+    }
+}
+tasks.named("build") {
+    dependsOn(tasks.named("shadowJar"))
+}
 tasks.test {
     useJUnitPlatform()
 }
