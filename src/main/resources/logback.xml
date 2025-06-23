@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- File -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/debug.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/debug-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>120</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %-7([%level]) %-20.-20logger{0} %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- INFO Console -->
+    <appender name="INFO" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %highlight(%-7([%level])) %boldGreen(%-20.-20logger{0}) %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- DEBUG Console -->
+    <appender name="DEBUG" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %highlight(%-7([%level])) %boldGreen(%-20.-20logger{0}) %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Vega -->
+    <logger name="com.nullXer0.beebot" level="TRACE">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="DEBUG"/>
+    </logger>
+
+    <!-- JDA -->
+    <logger name="net.dv8tion.jda" level="INFO">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="INFO"/>
+    </logger>
+
+    <!-- Quartz -->
+    <logger name="org.quartz" level="ERROR">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="INFO"/>
+    </logger>
+</configuration>

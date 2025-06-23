@@ -11,6 +11,7 @@ repositories {
 }
 
 dependencies {
+    implementation("ch.qos.logback:logback-classic:1.5.18")
     implementation("com.typesafe:config:1.4.3")
     implementation("com.zaxxer:HikariCP:6.3.0")
     implementation("org.quartz-scheduler:quartz:2.5.0")
