@@ -40,7 +40,7 @@ public class BeeBot
 
         // Wait for ready
         jda.awaitReady();
-        logger.info("Bot is ready.");
+        logger.info("Bot is ready");
         logger.info("Bot name: {}", jda.getSelfUser().getName());
         commandHandler.updateCommands();
     }

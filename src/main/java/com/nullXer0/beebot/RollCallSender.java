@@ -33,7 +33,7 @@ public class RollCallSender
 
         // Set the expiration to 24 hours before the event.
         long minutesUntil = ChronoUnit.MINUTES.between(Calendar.getInstance(TimeZone.getTimeZone("America/New_York")).toInstant(), startCal.toInstant()) - 1440;
-        if(minutesUntil<60)
+        if(minutesUntil < 60)
             minutesUntil = 60;
         builder.setDuration(minutesUntil, TimeUnit.MINUTES);
 

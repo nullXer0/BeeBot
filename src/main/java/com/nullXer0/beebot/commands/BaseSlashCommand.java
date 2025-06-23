@@ -26,11 +26,11 @@ public abstract class BaseSlashCommand
     public final SlashCommandData build()
     {
         SlashCommandData data = Commands.slash(name, description);
-        if(options!=null)
+        if(options != null)
         {
             data.addOptions(options);
         }
-        if(permissions!=null)
+        if(permissions != null)
         {
             data.setDefaultPermissions(permissions);
         }
