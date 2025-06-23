@@ -22,8 +22,8 @@ public class RollCallSender
 
     public static void sendRollCall(TextChannel channel, String event, Calendar startCal, Calendar endCal)
     {
-        // Will you be available for the Monday (23 Jun) scrim at 6:00pm-8:00pm?
-        MessagePollBuilder builder = new MessagePollBuilder(String.format("Will you be available for the %2$tA (%2$te %2$tb) %1$s at %2$tI:%2$tM%2$tp-%3$tI:%3$tM%3$tp?", event, startCal, endCal));
+        // Will you be available for the Monday (23 Jun) scrim at 6:00pm-8:00pm EDT?
+        MessagePollBuilder builder = new MessagePollBuilder(String.format("Will you be available for the %2$tA (%2$te %2$tb) %1$s at %2$tI:%2$tM%2$tp-%3$tI:%3$tM%3$tp %2$tZ?", event, startCal, endCal));
 
         // Add yes/no answers
         // <:THUMB_UP:1239251740247851171>
