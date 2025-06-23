@@ -43,3 +43,4 @@ bin/
 
 ### Application Specific ###
 application.conf
+logs/
