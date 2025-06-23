@@ -25,11 +25,17 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
 }
 
+
 tasks.withType<Jar> {
     manifest {
         attributes["Main-Class"] = "com.nullXer0.beebot.BeeBot"
     }
 }
+
+tasks.shadowJar {
+    archiveFileName.set("BeeBot.jar")
+}
+
 tasks.named("build") {
     dependsOn(tasks.named("shadowJar"))
 }
