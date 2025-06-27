@@ -2,7 +2,6 @@ package com.nullXer0.beebot.commands;
 
 import com.nullXer0.beebot.BeeBot;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
 import java.util.HashSet;
 import java.util.List;
@@ -33,7 +32,6 @@ public class CommandHandler
     public void registerCommand(BaseSlashCommand command)
     {
         commands.add(command);
-        Commands.slash(command.getName(), command.getDescription());
     }
 
     public void unregisterCommand(BaseSlashCommand command)
