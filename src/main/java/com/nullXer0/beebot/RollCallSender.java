@@ -12,15 +12,15 @@ import java.util.concurrent.TimeUnit;
 
 public class RollCallSender
 {
-    public static void sendRollCall(long channelID, String event, Calendar startCal, Calendar endCal)
+    public static void sendRollCall(long channelID, String event, Calendar startCal, Calendar endCal, int duration)
     {
         Guild guild = BeeBot.getJDA().getGuildById(BeeBot.getConfig().getLong("guild"));
         TextChannel channel = guild.getTextChannelById(channelID);
 
-        sendRollCall(channel, event, startCal, endCal);
+        sendRollCall(channel, event, startCal, endCal, duration);
     }
 
-    public static void sendRollCall(TextChannel channel, String event, Calendar startCal, Calendar endCal)
+    public static void sendRollCall(TextChannel channel, String event, Calendar startCal, Calendar endCal, int duration)
     {
         // Will you be available for the Monday (23 Jun) scrim at 6:00pm-8:00pm EDT?
         MessagePollBuilder builder = new MessagePollBuilder(String.format("Will you be available for the %2$tA (%2$te %2$tb) %1$s at %2$tI:%2$tM%2$tp-%3$tI:%3$tM%3$tp %2$tZ?", event, startCal, endCal));
@@ -31,19 +31,47 @@ public class RollCallSender
         // <:THUMB_DOWN:1239251771327516803>
         builder.addAnswer("No, I Won't.", Emoji.fromUnicode("\uD83D\uDC4E"));
 
-        long minutesUntil = ChronoUnit.MINUTES.between(Calendar.getInstance(TimeZone.getTimeZone("America/New_York")).toInstant(), startCal.toInstant());
-        if(minutesUntil < 60)
-            // 1 hour minimum
-            minutesUntil = 60;
-        else if(minutesUntil < 1440)
-            // 1 hour before if less than 24 hours
-            minutesUntil = minutesUntil - 60;
+        if(duration != 0)
+        {
+            builder.setDuration(duration, TimeUnit.MINUTES);
+        }
         else
-            // 24 hours before if more than 24 hours
-            minutesUntil = minutesUntil - 1440;
-        builder.setDuration(minutesUntil, TimeUnit.MINUTES);
+        {
+            long minutesUntil = ChronoUnit.MINUTES.between(Calendar.getInstance(TimeZone.getTimeZone("America/New_York")).toInstant(), startCal.toInstant());
+            if(minutesUntil < 60)
+                // 1 hour minimum
+                minutesUntil = 60;
+            else if(minutesUntil < 1440)
+                // 1 hour before if less than 24 hours
+                minutesUntil = minutesUntil - 60;
+            else
+                // 24 hours before if more than 24 hours
+                minutesUntil = minutesUntil - 1440;
+            builder.setDuration(minutesUntil, TimeUnit.MINUTES);
+        }
 
         // Send the poll message
         channel.sendMessagePoll(builder.build()).queue();
+    }
+
+    public static void sendRollCall(TextChannel channel, String event, Calendar startCal, Calendar endCal)
+    {
+        sendRollCall(channel, event, startCal, endCal, 0);
+    }
+
+    public static void sendRollCall(long channelID, String event, Calendar startCal, Calendar endCal)
+    {
+        sendRollCall(channelID, event, startCal, endCal, 0);
+    }
+
+    public static Calendar createCalendar(int hour, int minute, int am_pm, int day)
+    {
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("America/New_York"));
+        cal.add(Calendar.WEEK_OF_YEAR, 1);
+        cal.set(Calendar.HOUR, hour);
+        cal.set(Calendar.MINUTE, minute);
+        cal.set(Calendar.AM_PM, am_pm);
+        cal.set(Calendar.DAY_OF_WEEK, day);
+        return cal;
     }
 }

@@ -50,6 +50,7 @@ public class RollCallCommand extends BaseSlashCommand
     @Override
     protected void run(SlashCommandInteractionEvent event)
     {
+        //noinspection DataFlowIssue
         TextChannel channel = event.getOption("channel", OptionMapping::getAsChannel).asTextChannel();
         String eventType = event.getOption("type", OptionMapping::getAsString);
         int hour = event.getOption("hour", 0, OptionMapping::getAsInt);
