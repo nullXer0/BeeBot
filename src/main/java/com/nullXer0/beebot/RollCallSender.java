@@ -31,10 +31,16 @@ public class RollCallSender
         // <:THUMB_DOWN:1239251771327516803>
         builder.addAnswer("No, I Won't.", Emoji.fromUnicode("\uD83D\uDC4E"));
 
-        // Set the expiration to 24 hours before the event.
-        long minutesUntil = ChronoUnit.MINUTES.between(Calendar.getInstance(TimeZone.getTimeZone("America/New_York")).toInstant(), startCal.toInstant()) - 1440;
+        long minutesUntil = ChronoUnit.MINUTES.between(Calendar.getInstance(TimeZone.getTimeZone("America/New_York")).toInstant(), startCal.toInstant());
         if(minutesUntil < 60)
+            // 1 hour minimum
             minutesUntil = 60;
+        else if(minutesUntil < 1440)
+            // 1 hour before if less than 24 hours
+            minutesUntil = minutesUntil - 60;
+        else
+            // 24 hours before if more than 24 hours
+            minutesUntil = minutesUntil - 1440;
         builder.setDuration(minutesUntil, TimeUnit.MINUTES);
 
         // Send the poll message
