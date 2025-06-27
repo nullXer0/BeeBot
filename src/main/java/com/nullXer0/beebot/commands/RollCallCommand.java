@@ -68,6 +68,12 @@ public class RollCallCommand extends BaseSlashCommand
             startCal.set(Calendar.MINUTE, minute);
             startCal.set(Calendar.AM_PM, am_pm);
 
+            if(startCal.before(Calendar.getInstance(TimeZone.getTimeZone("America/New_York"))))
+            {
+                // If the time is before the current time, set it to the next week
+                startCal.add(Calendar.WEEK_OF_YEAR, 1);
+            }
+
             Calendar endCal = (Calendar) startCal.clone();
             endCal.add(Calendar.HOUR, lengthHours);
             endCal.add(Calendar.MINUTE, lengthMinutes);
