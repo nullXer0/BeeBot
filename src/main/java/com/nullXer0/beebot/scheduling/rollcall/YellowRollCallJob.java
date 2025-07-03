@@ -25,7 +25,7 @@ public class YellowRollCallJob extends BaseJob
                 .withIdentity("yellow")
                 .withDescription("Trigger for sending team yellow roll call")
                 .startNow()
-                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 12 ? * THU"))// Every Saturday at 12pm
+                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 12 ? * THU"))// Every Thursday at 12pm
                 .build();
     }
 
