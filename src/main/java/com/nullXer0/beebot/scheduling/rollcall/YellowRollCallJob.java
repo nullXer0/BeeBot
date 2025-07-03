@@ -4,6 +4,7 @@ import com.nullXer0.beebot.BeeBot;
 import com.nullXer0.beebot.RollCallSender;
 import com.nullXer0.beebot.scheduling.BaseJob;
 import com.typesafe.config.Config;
+import net.dv8tion.jda.api.JDA;
 import org.quartz.*;
 
 import java.util.Calendar;
@@ -38,13 +39,38 @@ public class YellowRollCallJob extends BaseJob
     public void execute(JobExecutionContext jobExecutionContext)
     {
         Config config = BeeBot.getConfig();
+        JDA jda = BeeBot.getJDA();
 
         // Text Channels
         long scrimChannel = config.getLong("channels.yellowScrim");
         long vodChannel = config.getLong("channels.yellowVOD");
         long tryoutsChannel = config.getLong("channels.yellowTryouts");
 
+        // Roles
+        long teamRole = config.getLong("roles.yellowTeam");
+        long tryoutsRole = config.getLong("roles.yellowTryouts");
+
         boolean tryoutsOpen = config.getBoolean("tryouts.yellow");
+
+        // Ping relavent roles
+        jda.getTextChannelById(scrimChannel)
+                .sendMessage(String.format("""
+                                📣 %s
+                                Please respond to the polls to help us capture player availability for this week’s activities. Your input helps us plan sessions more effectively.""",
+                        jda.getRoleById(teamRole).getAsMention())).queue();
+        jda.getTextChannelById(vodChannel)
+                .sendMessage(String.format("""
+                                📣 %s
+                                Please respond to the polls to help us capture player availability for this week’s activities. Your input helps us plan sessions more effectively.""",
+                        jda.getRoleById(teamRole).getAsMention())).queue();
+        if(tryoutsOpen)
+        {
+            jda.getTextChannelById(tryoutsChannel)
+                    .sendMessage(String.format("""
+                                    📣 %s
+                                    Please respond to the polls to help us capture player availability for this week’s activities. Your input helps us plan sessions more effectively.""",
+                            jda.getRoleById(tryoutsRole).getAsMention())).queue();
+        }
 
         for(int i = 0; i < 5; i++)
         {
