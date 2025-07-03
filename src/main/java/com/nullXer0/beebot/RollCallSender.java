@@ -12,24 +12,32 @@ import java.util.concurrent.TimeUnit;
 
 public class RollCallSender
 {
-    public static void sendRollCall(long channelID, String event, Calendar startCal, Calendar endCal, int duration)
+    public static void sendRollCall(long channelID, String event, Calendar startCal, Calendar endCal, int duration, boolean scrim)
     {
         Guild guild = BeeBot.getJDA().getGuildById(BeeBot.getConfig().getLong("guild"));
         TextChannel channel = guild.getTextChannelById(channelID);
 
-        sendRollCall(channel, event, startCal, endCal, duration);
+        sendRollCall(channel, event, startCal, endCal, duration, scrim);
     }
 
-    public static void sendRollCall(TextChannel channel, String event, Calendar startCal, Calendar endCal, int duration)
+    public static void sendRollCall(TextChannel channel, String event, Calendar startCal, Calendar endCal, int duration, boolean scrim)
     {
         // Will you be available for the Monday (23 Jun) scrim at 6:00pm-8:00pm EDT?
         MessagePollBuilder builder = new MessagePollBuilder(String.format("Will you be available for the %2$tA (%2$te %2$tb) %1$s at %2$tI:%2$tM%2$tp-%3$tI:%3$tM%3$tp %2$tZ?", event, startCal, endCal));
 
         // Add yes/no answers
-        // <:THUMB_UP:1239251740247851171>
-        builder.addAnswer("Yes, I will.", Emoji.fromUnicode("\uD83D\uDC4D"));
-        // <:THUMB_DOWN:1239251771327516803>
-        builder.addAnswer("No, I Won't.", Emoji.fromUnicode("\uD83D\uDC4E"));
+        builder.addAnswer("Yes, I will be available.", Emoji.fromUnicode("U+31 U+FE0F U+20E3"));
+        builder.addAnswer("No, I won't be available.", Emoji.fromUnicode("U+32 U+FE0F U+20E3"));
+        if(scrim)
+        {
+            builder.addAnswer("Maybe, I'll join from 6:45pm-8:00pm EDT.", Emoji.fromUnicode("U+33 U+FE0F U+20E3"));
+            builder.addAnswer("Maybe, I'll join from 8:00pm-10:00pm EDT.", Emoji.fromUnicode("U+34 U+FE0F U+20E3"));
+            builder.addAnswer("Not sure yet / TBD.", Emoji.fromUnicode("U+35 U+FE0F U+20E3"));
+        }
+        else
+        {
+            builder.addAnswer("Not sure yet / TBD.", Emoji.fromUnicode("U+33 U+FE0F U+20E3"));
+        }
 
         if(duration != 0)
         {
@@ -54,14 +62,14 @@ public class RollCallSender
         channel.sendMessagePoll(builder.build()).queue();
     }
 
-    public static void sendRollCall(TextChannel channel, String event, Calendar startCal, Calendar endCal)
+    public static void sendRollCall(TextChannel channel, String event, Calendar startCal, Calendar endCal, boolean scrim)
     {
-        sendRollCall(channel, event, startCal, endCal, 0);
+        sendRollCall(channel, event, startCal, endCal, 0, scrim);
     }
 
-    public static void sendRollCall(long channelID, String event, Calendar startCal, Calendar endCal)
+    public static void sendRollCall(long channelID, String event, Calendar startCal, Calendar endCal, boolean scrim)
     {
-        sendRollCall(channelID, event, startCal, endCal, 0);
+        sendRollCall(channelID, event, startCal, endCal, 0, scrim);
     }
 
     public static Calendar createCalendar(int hour, int minute, int am_pm, int day)
