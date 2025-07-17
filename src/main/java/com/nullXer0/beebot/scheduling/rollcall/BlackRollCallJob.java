@@ -26,7 +26,7 @@ public class BlackRollCallJob extends BaseJob
                 .withIdentity("black")
                 .withDescription("Trigger team black for sending roll call")
                 .startNow()
-                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 12 ? * THU"))// Every Thursday at 12pm
+                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 16 ? * THU"))// Every Thursday at 12pm
                 .build();
     }
 
