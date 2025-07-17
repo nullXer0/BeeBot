@@ -79,7 +79,7 @@ public class RollCallCommand extends BaseSlashCommand
             endCal.add(Calendar.HOUR, lengthHours);
             endCal.add(Calendar.MINUTE, lengthMinutes);
 
-            RollCallSender.sendRollCall(channel, eventType, startCal, endCal, false);
+            RollCallSender.sendRollCall(channel, eventType, startCal, endCal);
             event.reply("Successfully send poll message").setEphemeral(true).queue();
         }
         catch(IllegalArgumentException ex)
