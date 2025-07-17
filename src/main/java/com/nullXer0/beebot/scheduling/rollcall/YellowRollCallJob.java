@@ -67,17 +67,18 @@ public class YellowRollCallJob extends BaseJob
                             jda.getRoleById(tryoutsRole).getAsMention())).queue();
         }
 
-        for(int i = 0; i < 5; i++)
+        int vodReviewDay = 1;
+        for(int day = 0; day < 5; day++)
         {
-            // VOD reviews on Wednesdays at 7:45pm
-            String eventType = i == 2 ? "VOD review" : tryoutsOpen ? "tryout scrims" : "scrims";
+            // VOD reviews on Tuesdays at 7:45pm
+            String eventType = day == vodReviewDay ? "VOD review" : tryoutsOpen ? "tryout scrims" : "scrims";
 
-            sendPoll(7, 45, 10, 0, Calendar.MONDAY + i, eventType, i == 2 ? vodChannel : scrimChannel);
+            sendPoll(7, 45, 10, 0, Calendar.MONDAY + day, eventType, day == vodReviewDay ? vodChannel : scrimChannel);
 
             //Tryouts
-            if(tryoutsOpen && i != 2)
+            if(tryoutsOpen && day != vodReviewDay)
             {
-                sendPoll(7, 45, 10, 0, Calendar.MONDAY + i, "tryouts", tryoutsChannel);
+                sendPoll(7, 45, 10, 0, Calendar.MONDAY + day, "tryouts", tryoutsChannel);
             }
         }
     }
