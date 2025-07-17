@@ -58,11 +58,6 @@ public class YellowRollCallJob extends BaseJob
                                 📣 %s
                                 Please respond to the polls to help us capture player availability for this week’s activities. Your input helps us plan sessions more effectively.""",
                         jda.getRoleById(teamRole).getAsMention())).queue();
-        jda.getTextChannelById(vodChannel)
-                .sendMessage(String.format("""
-                                📣 %s
-                                Please respond to the polls to help us capture player availability for this week’s activities. Your input helps us plan sessions more effectively.""",
-                        jda.getRoleById(teamRole).getAsMention())).queue();
         if(tryoutsOpen)
         {
             jda.getTextChannelById(tryoutsChannel)
