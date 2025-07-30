@@ -37,9 +37,8 @@ public class YellowRollCallJob extends BaseJob
         JDA jda = BeeBot.getJDA();
 
         // Text Channels
-        long scrimChannel = config.getLong("channels.yellowScrim");
-        long vodChannel = config.getLong("channels.yellowVOD");
         long tryoutsChannel = config.getLong("channels.yellowTryouts");
+        long pollChannel = config.getLong("channels.yellowPolls");
 
         // Roles
         long teamRole = config.getLong("roles.yellowTeam");
@@ -48,7 +47,7 @@ public class YellowRollCallJob extends BaseJob
         boolean tryoutsOpen = config.getBoolean("tryouts.yellow");
 
         // Ping relavent roles
-        jda.getTextChannelById(scrimChannel)
+        jda.getTextChannelById(pollChannel)
                 .sendMessage(String.format("""
                                 📣 %s
                                 Please respond to the polls to help us capture player availability for this week’s activities. Your input helps us plan sessions more effectively.""",
@@ -68,7 +67,7 @@ public class YellowRollCallJob extends BaseJob
             // VOD reviews on Tuesdays at 7:45pm
             String eventType = day == vodReviewDay ? "VOD review" : tryoutsOpen ? "tryout scrims" : "scrims";
 
-            sendPoll(7, 45, 10, 0, Calendar.MONDAY + day, eventType, day == vodReviewDay ? vodChannel : scrimChannel);
+            sendPoll(7, 45, 10, 0, Calendar.MONDAY + day, eventType, pollChannel);
 
             //Tryouts
             if(tryoutsOpen && day != vodReviewDay)
