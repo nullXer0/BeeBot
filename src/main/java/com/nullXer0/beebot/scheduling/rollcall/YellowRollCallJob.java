@@ -30,11 +30,6 @@ public class YellowRollCallJob extends BaseJob
                 .build();
     }
 
-    public void addToScheduler(Scheduler scheduler) throws SchedulerException
-    {
-        scheduler.scheduleJob(getJobDetail(), getTrigger());
-    }
-
     @Override
     public void execute(JobExecutionContext jobExecutionContext)
     {
