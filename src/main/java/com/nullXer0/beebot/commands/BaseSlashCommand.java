@@ -10,7 +10,7 @@ public abstract class BaseSlashCommand
 {
     protected String name;
     protected String description;
-    protected DefaultMemberPermissions permissions;
+    protected DefaultMemberPermissions permissions = DefaultMemberPermissions.DISABLED;
     protected OptionData[] options;
 
     public String getName()
