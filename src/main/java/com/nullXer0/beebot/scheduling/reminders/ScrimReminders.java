@@ -11,11 +11,10 @@ import java.util.Date;
 public class ScrimReminders extends BaseJob
 {
     private static final String REMINDER_SCRIM_1_HOUR = """
-            @silent
-            %s — 🧠 Scrim at 8p ET!
+            %s — ⚔️ Scrim at 8p ET!
             """;
     private static final String REMINDER_SCRIM_30_MINUTES = """
-            %s — 🧠 30 minutes until scrim!
+            %s — ⚔️ 30 minutes until scrim!
             📌 No more ranked — time to focus, hydrate, and get ready.
             """;
     private static final String REMINDER_SCRIM_15_MINUTES = """
@@ -23,7 +22,6 @@ public class ScrimReminders extends BaseJob
             📌 Join VC and launch your game. Get in the room early.
             """;
     private static final String REMINDER_VOD_1_HOUR = """
-            @silent
             %s — 🎥 VOD review starts in 1 hour!
             📌 Use the time to decompress, take notes, or rewatch key rounds.
             """;
@@ -83,9 +81,9 @@ public class ScrimReminders extends BaseJob
             case 0 ->
             {
                 jda.getTextChannelById(yellowVodDay ? yellowVodChannel : yellowScrimChannel).sendMessage(String.format(yellowVodDay ?
-                        REMINDER_VOD_1_HOUR : REMINDER_SCRIM_1_HOUR, jda.getRoleById(yellowTeamRole).getAsMention())).queue();
+                        REMINDER_VOD_1_HOUR : REMINDER_SCRIM_1_HOUR, jda.getRoleById(yellowTeamRole).getAsMention())).setSuppressedNotifications(true).queue();
                 jda.getTextChannelById(blackVodDay ? blackVodChannel : blackScrimChannel).sendMessage(String.format(blackVodDay ?
-                        REMINDER_VOD_1_HOUR : REMINDER_SCRIM_1_HOUR, jda.getRoleById(blackTeamRole).getAsMention())).queue();
+                        REMINDER_VOD_1_HOUR : REMINDER_SCRIM_1_HOUR, jda.getRoleById(blackTeamRole).getAsMention())).setSuppressedNotifications(true).queue();
             }
             case 30 ->
             {
