@@ -51,7 +51,7 @@ public class ScrimReminders extends BaseJob
                 .withIdentity("reminderYellow1h")
                 .withDescription("1 hour reminder for team yellow roll call")
                 .startNow()
-                .withSchedule(CronScheduleBuilder.cronSchedule("0 0,30,45 23 ? * MON,WED,THU,FRI"))// Every Thursday at 12pm
+                .withSchedule(CronScheduleBuilder.cronSchedule("0 0,30,45 23 ? * MON-FRI"))// Every Thursday at 12pm
                 .build();
     }
 
