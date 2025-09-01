@@ -1,9 +1,6 @@
 package com.nullXer0.beebot;
 
-import com.nullXer0.beebot.commands.CommandHandler;
-import com.nullXer0.beebot.commands.RollCallCommand;
-import com.nullXer0.beebot.commands.TriggerJobCommand;
-import com.nullXer0.beebot.commands.TryoutsCommand;
+import com.nullXer0.beebot.commands.*;
 import com.nullXer0.beebot.listeners.CommandListener;
 import com.nullXer0.beebot.scheduling.reminders.EventReminders;
 import com.nullXer0.beebot.scheduling.rollcall.BlackRollCallJob;
@@ -42,7 +39,8 @@ public class BeeBot
         commandHandler = new CommandHandler(
                 new RollCallCommand(),
                 new TriggerJobCommand(),
-                new TryoutsCommand());
+                new TryoutsCommand(),
+                new ToggleEventCommand());
 
         // Register listeners
         CommandListener commandListener = new CommandListener(commandHandler);
