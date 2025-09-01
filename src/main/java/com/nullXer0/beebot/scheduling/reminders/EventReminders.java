@@ -8,8 +8,11 @@ import org.quartz.*;
 import java.util.Calendar;
 import java.util.Date;
 
-public class ScrimReminders extends BaseJob
+public class EventReminders extends BaseJob
 {
+    private static boolean yellowEventToday = true;
+    private static boolean blackEventToday = true;
+
     private static final String REMINDER_SCRIM_1_HOUR = """
             %s — ⚔️ Scrim at 8p ET!
             """;
@@ -37,7 +40,7 @@ public class ScrimReminders extends BaseJob
     @Override
     public JobDetail getJobDetail()
     {
-        return JobBuilder.newJob(ScrimReminders.class)
+        return JobBuilder.newJob(EventReminders.class)
                 .withIdentity("scrimReminders")
                 .withDescription("Sends 1h, 30m, and 15m reminders for scrims and VOD reviews")
                 .storeDurably()
@@ -80,25 +83,51 @@ public class ScrimReminders extends BaseJob
         {
             case 0 ->
             {
-                jda.getTextChannelById(yellowVodDay ? yellowVodChannel : yellowScrimChannel).sendMessage(String.format(yellowVodDay ?
-                        REMINDER_VOD_1_HOUR : REMINDER_SCRIM_1_HOUR, jda.getRoleById(yellowTeamRole).getAsMention())).setSuppressedNotifications(true).queue();
-                jda.getTextChannelById(blackVodDay ? blackVodChannel : blackScrimChannel).sendMessage(String.format(blackVodDay ?
-                        REMINDER_VOD_1_HOUR : REMINDER_SCRIM_1_HOUR, jda.getRoleById(blackTeamRole).getAsMention())).setSuppressedNotifications(true).queue();
+                if(yellowEventToday)
+                    jda.getTextChannelById(yellowVodDay ? yellowVodChannel : yellowScrimChannel).sendMessage(String.format(yellowVodDay ?
+                            REMINDER_VOD_1_HOUR : REMINDER_SCRIM_1_HOUR, jda.getRoleById(yellowTeamRole).getAsMention())).setSuppressedNotifications(true).queue();
+                if(blackEventToday)
+                    jda.getTextChannelById(blackVodDay ? blackVodChannel : blackScrimChannel).sendMessage(String.format(blackVodDay ?
+                            REMINDER_VOD_1_HOUR : REMINDER_SCRIM_1_HOUR, jda.getRoleById(blackTeamRole).getAsMention())).setSuppressedNotifications(true).queue();
             }
             case 30 ->
             {
-                jda.getTextChannelById(yellowVodDay ? yellowVodChannel : yellowScrimChannel).sendMessage(String.format(yellowVodDay ?
-                        REMINDER_VOD_30_MINUTES : REMINDER_SCRIM_30_MINUTES, jda.getRoleById(yellowTeamRole).getAsMention())).queue();
-                jda.getTextChannelById(blackVodDay ? blackVodChannel : blackScrimChannel).sendMessage(String.format(blackVodDay ?
-                        REMINDER_VOD_30_MINUTES : REMINDER_SCRIM_30_MINUTES, jda.getRoleById(blackTeamRole).getAsMention())).queue();
+                if(yellowEventToday)
+                    jda.getTextChannelById(yellowVodDay ? yellowVodChannel : yellowScrimChannel).sendMessage(String.format(yellowVodDay ?
+                            REMINDER_VOD_30_MINUTES : REMINDER_SCRIM_30_MINUTES, jda.getRoleById(yellowTeamRole).getAsMention())).queue();
+                if(blackEventToday)
+                    jda.getTextChannelById(blackVodDay ? blackVodChannel : blackScrimChannel).sendMessage(String.format(blackVodDay ?
+                            REMINDER_VOD_30_MINUTES : REMINDER_SCRIM_30_MINUTES, jda.getRoleById(blackTeamRole).getAsMention())).queue();
             }
             case 45 ->
             {
-                jda.getTextChannelById(yellowVodDay ? yellowVodChannel : yellowScrimChannel).sendMessage(String.format(yellowVodDay ?
-                        REMINDER_VOD_15_MINUTES : REMINDER_SCRIM_15_MINUTES, jda.getRoleById(yellowTeamRole).getAsMention())).queue();
-                jda.getTextChannelById(blackVodDay ? blackVodChannel : blackScrimChannel).sendMessage(String.format(blackVodDay ?
-                        REMINDER_VOD_15_MINUTES : REMINDER_SCRIM_15_MINUTES, jda.getRoleById(blackTeamRole).getAsMention())).queue();
+                if(yellowEventToday)
+                    jda.getTextChannelById(yellowVodDay ? yellowVodChannel : yellowScrimChannel).sendMessage(String.format(yellowVodDay ?
+                            REMINDER_VOD_15_MINUTES : REMINDER_SCRIM_15_MINUTES, jda.getRoleById(yellowTeamRole).getAsMention())).queue();
+                else
+                    yellowEventToday = true; // reset for next week
+                if(blackEventToday)
+                    jda.getTextChannelById(blackVodDay ? blackVodChannel : blackScrimChannel).sendMessage(String.format(blackVodDay ?
+                            REMINDER_VOD_15_MINUTES : REMINDER_SCRIM_15_MINUTES, jda.getRoleById(blackTeamRole).getAsMention())).queue();
+                else
+                    blackEventToday = true; // reset for next week
             }
         }
+    }
+
+    /**
+     * @return the new value of yellowEventToday. True if yellow events are NOT skipped for today, false if they are.
+     */
+    public static boolean toggleYellowEventToday()
+    {
+        return yellowEventToday = !yellowEventToday;
+    }
+
+    /**
+     * @return the new value of blackEventToday. True if black events are NOT skipped for today, false if they are.
+     */
+    public static boolean toggleBlackEventToday()
+    {
+        return blackEventToday = !blackEventToday;
     }
 }

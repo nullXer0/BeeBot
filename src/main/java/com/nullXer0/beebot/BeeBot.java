@@ -5,7 +5,7 @@ import com.nullXer0.beebot.commands.RollCallCommand;
 import com.nullXer0.beebot.commands.TriggerJobCommand;
 import com.nullXer0.beebot.commands.TryoutsCommand;
 import com.nullXer0.beebot.listeners.CommandListener;
-import com.nullXer0.beebot.scheduling.reminders.ScrimReminders;
+import com.nullXer0.beebot.scheduling.reminders.EventReminders;
 import com.nullXer0.beebot.scheduling.rollcall.BlackRollCallJob;
 import com.nullXer0.beebot.scheduling.rollcall.YellowRollCallJob;
 import com.typesafe.config.Config;
@@ -63,7 +63,7 @@ public class BeeBot
         // Register jobs
         new YellowRollCallJob().addToScheduler(scheduler);
         new BlackRollCallJob().addToScheduler(scheduler);
-        new ScrimReminders().addToScheduler(scheduler);
+        new EventReminders().addToScheduler(scheduler);
 
         // Start the scheduler
         scheduler.start();
