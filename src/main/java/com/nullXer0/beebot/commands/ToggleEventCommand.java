@@ -10,7 +10,7 @@ public class ToggleEventCommand extends BaseSlashCommand
 {
     public ToggleEventCommand()
     {
-        name = "togglescrims";
+        name = "toggleevent";
         description = "toggles the team event for the day";
         options = new OptionData[]{
                 new OptionData(OptionType.STRING, "team", "The team to toggle events for", true)
