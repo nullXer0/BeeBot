@@ -26,17 +26,17 @@ public class ToggleEventCommand extends BaseSlashCommand
         {
             case "yellow" ->
             {
-                if(!EventReminders.toggleYellowEventToday())
-                    event.reply("Yellow event skipped for today!").queue();
+                if(EventReminders.toggleYellowEventToday())
+                    event.reply("Next event for team yellow will be skipped!").queue();
                 else
-                    event.reply("Yellow event are no longer skipped for today!").queue();
+                    event.reply("Next event for team yellow will no longer be skipped!").queue();
             }
             case "black" ->
             {
-                if(!EventReminders.toggleBlackEventToday())
-                    event.reply("Black event skipped for today!").queue();
+                if(EventReminders.toggleBlackEventToday())
+                    event.reply("Next event for team black will be skipped!").queue();
                 else
-                    event.reply("Black event are no longer skipped for today!").queue();
+                    event.reply("Next event for team black will no longer be skipped!").queue();
             }
             case null, default -> event.reply("Invalid team!").setEphemeral(true).queue();
         }

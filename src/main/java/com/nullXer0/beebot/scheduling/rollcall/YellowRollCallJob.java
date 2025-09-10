@@ -7,10 +7,15 @@ import com.typesafe.config.Config;
 import net.dv8tion.jda.api.JDA;
 import org.quartz.*;
 
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 public class YellowRollCallJob extends BaseJob
 {
+    private static final List<Integer> SCRIM_DAYS = Arrays.asList();
+    private static final List<Integer> VOD_DAYS = Arrays.asList();
+
     public JobDetail getJobDetail()
     {
         return JobBuilder.newJob(YellowRollCallJob.class)
@@ -61,19 +66,19 @@ public class YellowRollCallJob extends BaseJob
                             jda.getRoleById(tryoutsRole).getAsMention())).queue();
         }
 
-        int vodReviewDay = 1;
-        for(int day = 0; day < 5; day++)
+        // scrims and vod reviews
+        for(int day = 1; day <= 7; day++)
         {
-            // VOD reviews on Tuesdays at 7:45pm
-            String eventType = day == vodReviewDay ? "VOD review" : tryoutsOpen ? "tryout scrims" : "scrims";
-
-            sendPoll(7, 45, 10, 0, Calendar.MONDAY + day, eventType, pollChannel);
-
-            //Tryouts
-            if(tryoutsOpen && day != vodReviewDay)
+            if(SCRIM_DAYS.contains(day))
             {
-                sendPoll(7, 45, 10, 0, Calendar.MONDAY + day, "tryouts", tryoutsChannel);
+                sendPoll(7, 45, 10, 0, day, "scrims", pollChannel);
+                if(tryoutsOpen)
+                {
+                    sendPoll(7, 45, 10, 0, day, "tryouts", tryoutsChannel);
+                }
             }
+            if(VOD_DAYS.contains(day))
+                sendPoll(7, 45, 10, 0, day, "VOD review", pollChannel);
         }
     }
 
@@ -86,5 +91,15 @@ public class YellowRollCallJob extends BaseJob
 
         // Send the roll call for the scrim
         RollCallSender.sendRollCall(channelID, eventType, startCal, endCal, 4320);
+    }
+
+    public static List<Integer> getScrimDays()
+    {
+        return List.copyOf(SCRIM_DAYS);
+    }
+
+    public static List<Integer> getVodDays()
+    {
+        return List.copyOf(VOD_DAYS);
     }
 }
