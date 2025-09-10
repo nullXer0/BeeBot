@@ -1,6 +1,9 @@
 package com.nullXer0.beebot;
 
+import com.nullXer0.dbee.tables.*;
+
 import com.nullXer0.beebot.commands.*;
+import com.nullXer0.beebot.database.Database;
 import com.nullXer0.beebot.listeners.CommandListener;
 import com.nullXer0.beebot.scheduling.reminders.EventReminders;
 import com.nullXer0.beebot.scheduling.rollcall.BlackRollCallJob;
@@ -10,6 +13,11 @@ import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigRenderOptions;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import org.jooq.DSLContext;
+import org.jooq.Record;
+import org.jooq.Result;
+import org.jooq.SQLDialect;
+import org.jooq.impl.DSL;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.impl.StdSchedulerFactory;
@@ -19,6 +27,9 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class BeeBot
 {
@@ -29,9 +40,20 @@ public class BeeBot
     private static CommandHandler commandHandler;
     private static Scheduler scheduler;
 
-    public static void main(String[] ignoredArgs) throws InterruptedException, IOException, SchedulerException
+    public static void main(String[] ignoredArgs) throws InterruptedException, IOException, SchedulerException, SQLException
     {
         config = loadConfig();
+
+        //TODO: Remove test code
+        Database.initialize(config.getString("database.jdbcUrl"), config.getString("database.username"), config.getString("database.password"));
+        Connection connection = Database.getConnection();
+        DSLContext context = DSL.using(connection, SQLDialect.POSTGRES);
+        Result<Record> result = context.select().from(Teams.TEAMS).fetch();
+        for(Record record : result)
+        {
+            String teamName = record.get(Teams.TEAMS.NAME);
+            logger.info("Found team: {}", teamName);
+        }
 
         JDABuilder builder = JDABuilder.createDefault(config.getString("token"));
 
