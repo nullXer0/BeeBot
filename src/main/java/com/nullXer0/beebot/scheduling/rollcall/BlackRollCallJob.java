@@ -52,12 +52,15 @@ public class BlackRollCallJob extends BaseJob
         boolean tryoutsOpen = config.getBoolean("tryouts.black");
 
         // Ping relavent roles
-        jda.getTextChannelById(pollChannel)
-                .sendMessage(String.format("""
-                                📣 %s
-                                Please respond to the polls to help us capture player availability for this week’s activities. Your input helps us plan sessions more effectively.""",
-                        jda.getRoleById(teamRole).getAsMention())).queue();
-        if(tryoutsOpen)
+        if(!SCRIM_DAYS.isEmpty() || !VOD_DAYS.isEmpty())
+        {
+            jda.getTextChannelById(pollChannel)
+                    .sendMessage(String.format("""
+                                    📣 %s
+                                    Please respond to the polls to help us capture player availability for this week’s activities. Your input helps us plan sessions more effectively.""",
+                            jda.getRoleById(teamRole).getAsMention())).queue();
+        }
+        if(tryoutsOpen && !SCRIM_DAYS.isEmpty())
         {
             jda.getTextChannelById(tryoutsChannel)
                     .sendMessage(String.format("""
